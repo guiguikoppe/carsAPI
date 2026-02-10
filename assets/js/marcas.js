@@ -1,34 +1,41 @@
-const button = document.getElementById('load');
+const buttonCarros = document.getElementById('carros');
+const buttonCaminhoes = document.getElementById('caminhoes');
+const buttonMotos = document.getElementById('motos');
 const brandsDiv = document.getElementById('brands');
 
-if (button) {
-  button.addEventListener('click', carregarMarcas);
-}
+buttonCarros.addEventListener('click', () => carregarMarcas('car'));
+buttonCaminhoes.addEventListener('click', () => carregarMarcas('truck'));
+buttonMotos.addEventListener('click', () => carregarMarcas('motorcycle'));
 
-async function carregarMarcas() {
+async function carregarMarcas(tipo) {
   brandsDiv.innerHTML = '<p>Carregando marcas...</p>';
 
   try {
     const response = await fetch(
-      'https://vpic.nhtsa.dot.gov/api/vehicles/getallmakes?format=json'
+      `https://vpic.nhtsa.dot.gov/api/vehicles/GetMakesForVehicleType/${tipo}?format=json`
     );
 
     const data = await response.json();
     brandsDiv.innerHTML = '';
 
-    data.Results.slice(0, 30).forEach(marca => {
+    if (!data.Results || data.Results.length === 0) {
+      brandsDiv.innerHTML = '<p>Nenhuma marca encontrada.</p>';
+      return;
+    }
+
+    data.Results.forEach(marca => {
+      const nomeLimpo = marca.MakeName.replace(/^#\d+\s*/, '');
+
       const card = document.createElement('div');
       card.className = 'card clickable';
 
       card.innerHTML = `
-        <h3>${marca.Make_Name}</h3>
-        <p>ID: ${marca.Make_ID}</p>
+        <h3>${nomeLimpo}</h3>
+        <p>ID: ${marca.MakeId}</p>
       `;
 
       card.addEventListener('click', () => {
-        // 👇 salva ID e nome
-        localStorage.setItem('marcaId', marca.Make_ID);
-        localStorage.setItem('marcaNome', marca.Make_Name);
+        localStorage.setItem('marcaNome', nomeLimpo);
         window.location.href = 'modelos.html';
       });
 
@@ -36,7 +43,7 @@ async function carregarMarcas() {
     });
 
   } catch (error) {
-    brandsDiv.innerHTML = '<p>Erro ao carregar marcas.</p>';
     console.error(error);
+    brandsDiv.innerHTML = '<p>Erro ao carregar marcas.</p>';
   }
 }
