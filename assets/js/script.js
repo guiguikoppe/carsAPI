@@ -1,43 +1,36 @@
-const button = document.getElementById('load');
-const brandsDiv = document.getElementById('brands');
+const buttonLoad = document.getElementById('load');
+const brandsDivAll = document.getElementById('brands');
 
+if (buttonLoad && brandsDivAll) {
 
-button.addEventListener('click', carregarMarcas);
+  buttonLoad.addEventListener('click', carregarTodasMarcas);
 
+  async function carregarTodasMarcas() {
+    brandsDivAll.innerHTML = '<p>Carregando...</p>';
 
-async function carregarMarcas() {
-brandsDiv.innerHTML = '<p>Carregando...</p>';
+    try {
+      const response = await fetch(
+        'https://vpic.nhtsa.dot.gov/api/vehicles/getallmakes?format=json'
+      );
 
+      const data = await response.json();
+      brandsDivAll.innerHTML = '';
 
-try {
-const response = await fetch(
-'https://vpic.nhtsa.dot.gov/api/vehicles/getallmakes?format=json'
-);
+      data.Results.slice(0, 30).forEach(marca => {
+        const card = document.createElement('div');
+        card.className = 'card';
 
+        card.innerHTML = `
+          <h3>${marca.Make_Name}</h3>
+          <p>ID: ${marca.Make_ID}</p>
+        `;
 
-const data = await response.json();
+        brandsDivAll.appendChild(card);
+      });
 
-
-brandsDiv.innerHTML = '';
-
-
-data.Results.slice(0, 30).forEach(marca => {
-const card = document.createElement('div');
-card.classList.add('card');
-
-
-card.innerHTML = `
-<h3>${marca.Make_Name}</h3>
-<p>ID: ${marca.Make_ID}</p>
-`;
-
-
-brandsDiv.appendChild(card);
-});
-
-
-} catch (error) {
-brandsDiv.innerHTML = '<p>Erro ao carregar dados.</p>';
-console.error(error);
-}
+    } catch (error) {
+      console.error(error);
+      brandsDivAll.innerHTML = '<p>Erro ao carregar dados.</p>';
+    }
+  }
 }

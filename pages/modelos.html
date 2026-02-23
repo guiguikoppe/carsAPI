@@ -1,33 +1,39 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>CarInfo | Modelos</title>
-<link rel="stylesheet" href="../assets/css/style.css" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CarInfo | Modelos</title>
+  <link rel="stylesheet" href="../assets/css/style.css" />
 </head>
 <body>
 
-
 <nav class="navbar">
-<h1>🚗 CarInfo</h1>
-<ul>
-<li><a href="../index.html">Home</a></li>
-<li><a href="marcas.html">Marcas</a></li>
-<li><a href="modelos.html">Modelos</a></li>
-</ul>
+  <h1>🚗 CarInfo</h1>
+  <ul>
+    <li><a href="../index.html">Home</a></li>
+    <li><a href="marcas.html">Marcas</a></li>
+    <li><a href="modelos.html">Modelos</a></li>
+  </ul>
 </nav>
 
-
 <main class="container center">
-<h2 id="titulo">Modelos</h2>
-<div id="models" class="grid"></div>
-
-<p>Selecione uma marca futuramente para ver os modelos.</p>
+  <h2 id="titulo">Modelos</h2>
+  <div id="models" class="grid"></div>
+  <p id="aviso"></p>
 </main>
 
+<!-- MODAL -->
+<div id="modal" class="modal hidden">
+  <div class="modal-card">
+    <span id="fechar">✖</span>
+    <img id="carro-img" alt="Imagem do carro">
+    <h2 id="modelo-nome"></h2>
+    <div id="info-extra"></div>
+    <p id="marca-nome"></p>
+  </div>
+</div>
+
 <script src="../assets/js/modelos.js"></script>
-
-
 </body>
 </html>
